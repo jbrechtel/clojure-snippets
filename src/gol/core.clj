@@ -26,8 +26,7 @@
   [])
 
 (defn neighbour-count [world p]
-  0
-  (reduce + (map (fn [x] (let [v (world-at world x)] (if (nil? v) 0 v))) (neighbours p))))
+  0)
 
 (defn new-state [world p]
   0)
