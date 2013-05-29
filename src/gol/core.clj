@@ -1,7 +1,8 @@
 ;;; Implementation of the Game of Life
 ;;; jeff.foster@acm.org
 
-(ns game-of-life
+(ns gol.core
+  (:gen-class)
   (:import (javax.swing JFrame JLabel JTextField JButton JComboBox JPanel Timer))
   (:import (java.awt.event ActionListener MouseListener MouseAdapter MouseEvent))
   (:import (java.awt GridLayout Color)))
@@ -32,7 +33,7 @@
 
 (defn new-state [world p]
   (let [neighbours (neighbour-count world p) alive (world-at world p)]
-    (cond 
+    (cond
      (and (= alive 1) (< neighbours 2)) 0 ;; under population
      (and (= alive 1) (> neighbours 3)) 0 ;; over-crowding
      (and (= alive 1) (or (= 2 neighbours) (= 3 neighbours))) 1 ;; unchanged to the next generation
@@ -67,7 +68,7 @@
   (let [frame (JFrame. "Game of Life")]
     (doto canvas
       (.addMouseListener (proxy [MouseAdapter] []
-        (mouseClicked [e] 
+        (mouseClicked [e]
           (if (= (MouseEvent/BUTTON1) (.getButton e))
 	    (let [sq-size (/ (min (.getHeight canvas) (.getWidth canvas)) grid-size) x (int (/ (.getX e) sq-size)) y (int (/ (.getY e) sq-size))]
 	      (swap! world (fn [w] (toggle-pos w (struct point x y)))))
@@ -78,3 +79,6 @@
       (.setSize 300 300)
       (.setResizable true)
       (.setVisible true))))
+
+(defn -main [& args]
+  (lifeapp))
