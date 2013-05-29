@@ -23,22 +23,14 @@
     (assoc world point 0)))
 
 (defn neighbours [p]
-  (let [x (:x p) y (:y p)]
-    [(struct point (dec x) (dec y)) (struct point x (dec y)) (struct point (inc x) (dec y))
-     (struct point (dec x) y) (struct point (inc x) y)
-     (struct point (dec x) (inc y)) (struct point x (inc y)) (struct point (inc x) (inc y))]))
+  [])
 
 (defn neighbour-count [world p]
+  0
   (reduce + (map (fn [x] (let [v (world-at world x)] (if (nil? v) 0 v))) (neighbours p))))
 
 (defn new-state [world p]
-  (let [neighbours (neighbour-count world p) alive (world-at world p)]
-    (cond
-     (and (= alive 1) (< neighbours 2)) 0 ;; under population
-     (and (= alive 1) (> neighbours 3)) 0 ;; over-crowding
-     (and (= alive 1) (or (= 2 neighbours) (= 3 neighbours))) 1 ;; unchanged to the next generation
-     (and (= 3 neighbours)) 1 ;; any tile with exactly 3 live neighbour cells becomes alive
-     :else 0)))
+  0)
 
 (defn life-step [w]
   (into (hash-map) (map (fn [x] [(first x) (new-state w (first x))]) w)))
